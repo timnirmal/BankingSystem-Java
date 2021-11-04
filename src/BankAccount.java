@@ -3,7 +3,6 @@ import java.util.Scanner;
 import java.io.File;  // Import the File class
 import java.io.IOException;  // Import the IOException class to handle errors
 
-
 public class BankAccount {
     private int accountNumber;
     private String accountName;
@@ -20,7 +19,6 @@ public class BankAccount {
         this.accountBalance = accountBalance;
         this.accountAddress = accountAddress;
         this.accountAge = accountAge;
-
     }
 
     public void setAccountName(String accountName) {
@@ -133,3 +131,5 @@ public class BankAccount {
 //      Exit
 
 
+// To do
+//      Modify the createobject class with method to find curent username from file

@@ -7,7 +7,6 @@ public class Main {
     static int count = 0;
     static boolean accountLogin = false;
 
-
     public void incrementCount() {
         count++;
     }
@@ -54,7 +53,7 @@ public class Main {
         }
 
         try {
-            FileWriter myWriter = new FileWriter("filename.txt");
+            FileWriter myWriter = new FileWriter("filename1.txt");
             myWriter.write("Account Number: " + accountNumber + "\n");
             myWriter.write("Name: " + name + "\n");
             myWriter.write("Username: " + usersname + "\n");
@@ -139,152 +138,188 @@ public class Main {
         }
     }
 */
-    public static void main(String[] args) {
-        System.out.println("Hello World");
 
+    public static void main(String[] args) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
-        // Create BankAccount
-        // createAccount();
+        outerloop: while (true) {
+            System.out.println("\nWelcome to the Bank of Java\n");
+            System.out.println("1. Create Account");
+            System.out.println("2. Login");
+            System.out.println("3. Exit");
 
-        // Login
-        // login();
+            System.out.println("\nEnter your choice : ");
+            int choice = myObj.nextInt();  // Read user input
 
-        BankAccount account = new BankAccount();
+            switch (choice) {
+                case 1:
+                    createAccount();
+                    break;
+                case 2:
+                    //////// Create Account user object for current user
+                    BankAccount account = new BankAccount();
+                    accountLogin = true;
+                    // Add data to the account object
+                    createAccountObject(account);
 
-        // Request Balance
-        if (login()){
-            accountLogin = true;
+                    if (login()){
+                        // You are successfully logged in
+                        System.out.println("\nYou are successfully logged in\n");
 
-            try {
-                File file = new File("filename.txt");
-                Scanner myReader = new Scanner(file);
+                        System.out.println("\n1. Request Balance");
+                        System.out.println("2. Withdraw Money");
+                        System.out.println("3. Deposit Money");
+                        System.out.println("4. Transfer Money");
+                        System.out.println("5. Close Account");
+                        System.out.println("6. Logout");
 
-                while (myReader.hasNextLine()) {
-                    String data = myReader.nextLine();
-                    String[] parts = data.split(": ");
+                        System.out.println("\nEnter your choice : ");
 
-                    switch (parts[0]) {
-                        case "Account Number":
-                            account.setAccountNumber(Integer.parseInt(parts[1]));
-                            break;
-                        case "Name":
-                            account.setAccountName(parts[1]);
-                            break;
-                        case "Address":
-                            account.setAccountAddress(parts[1]);
-                            break;
-                        case "Age":
-                            account.setAccountAge(Integer.parseInt(parts[1]));
-                            break;
-                        case "Balance":
-                            account.setAccountBalance(Double.parseDouble(parts[1]));
-                            break;
+                        int choice2 = myObj.nextInt();  // Read user input
+                        switch (choice2) {
+                            case 1:
+                                requestBalance(accountNumber);
+                                break;
+
+                        }
                     }
-                }
-                myReader.close();
-
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
             }
+            // Create BankAccount
+            // createAccount();
 
-            System.out.println(account.toString());
-        }
-        System.out.println("\n");
+            // Login
+            // login();
 
-        // Print Account Balance
-        if (accountLogin){
-            System.out.println(account.getAccountBalance());
-        }
 
-        // Withdraw Money
-        if (accountLogin){
-            System.out.println("\nWithdraw Money : \n");
-            System.out.println("Enter amount to withdraw : ");
-            double withdraw = myObj.nextDouble();
-            account.withdraw(withdraw);
+            // Add data to
+            if (login()) {
+
+            }
+            System.out.println("\n");
 
             // Print Account Balance
-            System.out.println("Account Balance");
-            System.out.println(account.getAccountBalance());
-
-            // Need to save to file
-        }
-
-        // Deposit Money
-        if (accountLogin){
-            System.out.println("\nDeposit Money : \n");
-            System.out.println("Enter amount to deposit : ");
-            double deposit = myObj.nextDouble();
-            account.deposit(deposit);
-
-            // Print Account Balance
-            System.out.println("Account Balance");
-            System.out.println(account.getAccountBalance());
-
-            // Need to save to file
-        }
-
-        // Transfer Money
-        if (accountLogin){
-            System.out.println("\nTransfer Money : \n");
-
-            // Get Destination Account
-            System.out.println("Enter destination account number : ");
-            int destinationAccountNumber = myObj.nextInt();
-
-            BankAccount destinationAccount = new BankAccount();
-
-            try {
-                File file = new File("filename.txt");
-                Scanner myReader = new Scanner(file);
-
-                while (myReader.hasNextLine()) {
-                    String data = myReader.nextLine();
-                    String[] parts = data.split(": ");
-
-                    switch (parts[0]) {
-                        case "Account Number":
-                            account.setAccountNumber(Integer.parseInt(parts[1]));
-                            break;
-                        case "Name":
-                            account.setAccountName(parts[1]);
-                            break;
-                        case "Address":
-                            account.setAccountAddress(parts[1]);
-                            break;
-                        case "Age":
-                            account.setAccountAge(Integer.parseInt(parts[1]));
-                            break;
-                        case "Balance":
-                            account.setAccountBalance(Double.parseDouble(parts[1]));
-                            break;
-                    }
-                }
-                myReader.close();
-
-            } catch (IOException e) {
-                System.out.println("An error occurred.");
-                e.printStackTrace();
+            if (accountLogin) {
+                System.out.println(account.getAccountBalance());
             }
 
-            System.out.println(account.toString());
+            // Withdraw Money
+            if (accountLogin) {
+                System.out.println("\nWithdraw Money : \n");
+                System.out.println("Enter amount to withdraw : ");
+                double withdraw = myObj.nextDouble();
+                account.withdraw(withdraw);
+
+                // Print Account Balance
+                System.out.println("Account Balance");
+                System.out.println(account.getAccountBalance());
+
+                // Need to save to file
+            }
+
+            // Deposit Money
+            if (accountLogin) {
+                System.out.println("\nDeposit Money : \n");
+                System.out.println("Enter amount to deposit : ");
+                double deposit = myObj.nextDouble();
+                account.deposit(deposit);
+
+                // Print Account Balance
+                System.out.println("Account Balance");
+                System.out.println(account.getAccountBalance());
+
+                // Need to save to file
+            }
+
+            // Transfer Money
+            if (accountLogin) {
+                System.out.println("\nTransfer Money : \n");
+
+                // Get Destination Account
+                System.out.println("Enter destination account number : ");
+                int destinationAccountNumber = myObj.nextInt();
+
+                BankAccount destinationAccount = new BankAccount();
+
+                // Need to send the destination account number to the method
+                createAccountObject(destinationAccount);
 
 
+                System.out.println("Enter amount to transfer : ");
+                double transfer = myObj.nextDouble();
+                //account.transfer(transfer);
 
+                // Need to aff to files
 
-            System.out.println("Enter amount to transfer : ");
-            double transfer = myObj.nextDouble();
-            account.transfer(transfer);
+            }
+
+            // Close Account
+            if (accountLogin) {
+                System.out.println("\nClose Account : \n");
+                System.out.println("Are you sure you want to delete account (Y or N)");
+                String answer = myObj.next();
+
+                if (answer.equals("Y")) {
+                    // Delete account
+
+                    // Need to delete from file
+
+                    System.out.println("Account Deleted");
+                } else {
+                    System.out.println("Account not deleted");
+                }
+            }
+
+            // Logout
+            if (accountLogin) {
+                System.out.println("\nLogout : \n");
+                break outerloop;
+            }
+
 
         }
 
 
+    }
 
 
 
 
+
+    private static void createAccountObject(BankAccount account) {
+        try {
+            File file = new File("filename.txt");
+            Scanner myReader = new Scanner(file);
+
+            while (myReader.hasNextLine()) {
+                String data = myReader.nextLine();
+                String[] parts = data.split(": ");
+
+                switch (parts[0]) {
+                    case "Account Number":
+                        account.setAccountNumber(Integer.parseInt(parts[1]));
+                        break;
+                    case "Name":
+                        account.setAccountName(parts[1]);
+                        break;
+                    case "Address":
+                        account.setAccountAddress(parts[1]);
+                        break;
+                    case "Age":
+                        account.setAccountAge(Integer.parseInt(parts[1]));
+                        break;
+                    case "Balance":
+                        account.setAccountBalance(Double.parseDouble(parts[1]));
+                        break;
+                }
+            }
+            myReader.close();
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        System.out.println(account.toString());
     }
 }
 

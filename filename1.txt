@@ -1,0 +1,7 @@
+Account Number: 0
+Name: nirmal
+Username: nirmal
+Password: 0714408821
+Address: osjdiodjij
+Age: 12
+Balance: 500000.0
