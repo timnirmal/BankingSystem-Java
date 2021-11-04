@@ -23,6 +23,13 @@ public class Main {
         System.out.println("Enter your Username");
         String usersname = myObj.nextLine();  // Read user input
 
+        File f = new File(usersname + ".txt");
+        while (f.exists()) {
+            System.out.println("\nUsername already exists. Please try again.\n");
+            System.out.println("Enter your Username");
+            usersname = myObj.nextLine();  // Read user input
+        }
+
         System.out.println("Enter your Password");
         String password = myObj.nextLine();  // Read user input
 
@@ -162,7 +169,8 @@ public class Main {
                     // Add data to the account object
                     createAccountObject(account);
 
-                    if (login()){
+                    //////// Login
+                    innerloop : while (login()){
                         // You are successfully logged in
                         System.out.println("\nYou are successfully logged in\n");
 
@@ -178,111 +186,99 @@ public class Main {
                         int choice2 = myObj.nextInt();  // Read user input
                         switch (choice2) {
                             case 1:
-                                requestBalance(accountNumber);
+                                // Print Account Balance
+                                if (accountLogin) {
+                                    System.out.println(account.getAccountBalance());
+                                }
                                 break;
+                            case 2:
+                                // Withdraw Money
 
+                                System.out.println("\nWithdraw Money : \n");
+                                System.out.println("Enter amount to withdraw : ");
+                                double withdraw = myObj.nextDouble();
+                                account.withdraw(withdraw);
+
+                                // Print Account Balance
+                                System.out.println("Account Balance");
+                                System.out.println(account.getAccountBalance());
+
+                                // Need to save to file
+
+                                break;
+                            case 3:
+                                // Deposit Money
+                                System.out.println("\nDeposit Money : \n");
+                                System.out.println("Enter amount to deposit : ");
+                                double deposit = myObj.nextDouble();
+                                account.deposit(deposit);
+
+                                // Print Account Balance
+                                System.out.println("Account Balance");
+                                System.out.println(account.getAccountBalance());
+
+                                // Need to save to file
+                                break;
+                            case 4:
+                                // Transfer Money
+                                System.out.println("\nTransfer Money : \n");
+
+                                // Get Destination Account
+                                System.out.println("Enter destination account number : ");
+                                int destinationAccountNumber = myObj.nextInt();
+
+                                BankAccount destinationAccount = new BankAccount();
+
+                                // Need to send the destination account number to the method
+                                createAccountObject(destinationAccount);
+
+
+                                System.out.println("Enter amount to transfer : ");
+                                double transfer = myObj.nextDouble();
+                                //account.transfer(transfer);
+
+                                // Need to aff to files
+
+                                break;
+                            case 5:
+                                // Close Account
+                                System.out.println("\nClose Account : \n");
+                                System.out.println("Are you sure you want to delete account (Y or N)");
+                                String answer = myObj.next();
+
+                                if (answer.equals("Y")) {
+                                    // Delete account
+
+                                    // Need to delete from file
+
+                                    System.out.println("Account Deleted");
+                                } else {
+                                    System.out.println("Account not deleted");
+                                }
+                                break;
+                            case 6:
+                                // Logout
+                                System.out.println("\nLogout : \n");
+                                break innerloop;
                         }
+
+
                     }
+                    // End of inner loop (Login)
+
+                    //////// Exit
+                case 3:
+                    break outerloop;
             }
-            // Create BankAccount
-            // createAccount();
-
-            // Login
-            // login();
+            // Enf of outer loop
 
 
-            // Add data to
-            if (login()) {
-
-            }
-            System.out.println("\n");
-
-            // Print Account Balance
-            if (accountLogin) {
-                System.out.println(account.getAccountBalance());
-            }
-
-            // Withdraw Money
-            if (accountLogin) {
-                System.out.println("\nWithdraw Money : \n");
-                System.out.println("Enter amount to withdraw : ");
-                double withdraw = myObj.nextDouble();
-                account.withdraw(withdraw);
-
-                // Print Account Balance
-                System.out.println("Account Balance");
-                System.out.println(account.getAccountBalance());
-
-                // Need to save to file
-            }
-
-            // Deposit Money
-            if (accountLogin) {
-                System.out.println("\nDeposit Money : \n");
-                System.out.println("Enter amount to deposit : ");
-                double deposit = myObj.nextDouble();
-                account.deposit(deposit);
-
-                // Print Account Balance
-                System.out.println("Account Balance");
-                System.out.println(account.getAccountBalance());
-
-                // Need to save to file
-            }
-
-            // Transfer Money
-            if (accountLogin) {
-                System.out.println("\nTransfer Money : \n");
-
-                // Get Destination Account
-                System.out.println("Enter destination account number : ");
-                int destinationAccountNumber = myObj.nextInt();
-
-                BankAccount destinationAccount = new BankAccount();
-
-                // Need to send the destination account number to the method
-                createAccountObject(destinationAccount);
-
-
-                System.out.println("Enter amount to transfer : ");
-                double transfer = myObj.nextDouble();
-                //account.transfer(transfer);
-
-                // Need to aff to files
-
-            }
-
-            // Close Account
-            if (accountLogin) {
-                System.out.println("\nClose Account : \n");
-                System.out.println("Are you sure you want to delete account (Y or N)");
-                String answer = myObj.next();
-
-                if (answer.equals("Y")) {
-                    // Delete account
-
-                    // Need to delete from file
-
-                    System.out.println("Account Deleted");
-                } else {
-                    System.out.println("Account not deleted");
-                }
-            }
-
-            // Logout
-            if (accountLogin) {
-                System.out.println("\nLogout : \n");
-                break outerloop;
-            }
 
 
         }
 
 
     }
-
-
-
 
 
     private static void createAccountObject(BankAccount account) {

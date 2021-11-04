@@ -1,7 +1,7 @@
 Account Number: 0
-Name: nirmal
-Username: nirmal
+Name: thimira
+Username: timnirmal
 Password: 0714408821
-Address: osjdiodjij
-Age: 12
-Balance: 500000.0
+Address: duhdhsudhssd
+Age: 23
+Balance: 1200002.0
