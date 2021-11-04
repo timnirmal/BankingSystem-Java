@@ -90,7 +90,7 @@ public class BankAccount {
     }
 
     public String toString() {
-        return "Name: " + accountName + "\nAccount Number: " + accountNumber + "\nAccount Balance: " + accountBalance + "\nAddress: " + accountAddress;// + "\nPhone Number: " + phoneNumber;
+        return "Name: " + accountName + "\nAccount Number: " + accountNumber + "\nAccount Balance: " + accountBalance + "\nAddress: " + accountAddress + "\nUsername" + accountUserName ;// +  "\nPhone Number: " + phoneNumber;
     }
 
 

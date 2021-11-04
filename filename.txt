@@ -1,7 +1,0 @@
-Account Number: 0
-Name: thimira
-Username: timnirmal
-Password: 0714408821
-Address: osjdiodjij
-Age: 12
-Balance: 250000.0

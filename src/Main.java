@@ -1,21 +1,16 @@
 import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
-import java.io.IOException;
-import java.text.SimpleDateFormat;
+import java.io.FilenameFilter;  // Import the FilenameFilter class
+import java.io.IOException;     // Import the IOException class to handle errors
+import java.text.SimpleDateFormat; // Import the SimpleDateFormat class to format the date
 import java.util.Date;
 import java.util.Scanner;  // Import the Scanner class
 
 public class Main {
     static int count = 0;
-    static boolean accountLogin = false;
-
-    public void incrementCount() {
-        count++;
-    }
-
-    int x = 5;
 
     public static void createAccount() {
+        count =0;
         System.out.println("\nCreate Account : \n");
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
 
@@ -23,23 +18,30 @@ public class Main {
         String name = myObj.nextLine();  // Read user input
 
         System.out.println("Enter your Username");
-        String usersname = myObj.nextLine();  // Read user input
+        String username = myObj.nextLine();  // Read user input
 
-        String pathname = usersname + ".txt";
+        String pathname = username + ".txt";
         File f = new File(pathname);
 
         if(f.exists()){
             while (true){
-                System.out.println(usersname);
-                System.out.println(pathname);
-                String newname = usersname;
-                if (usersname != pathname){
-                    break;
-                }
                 System.out.println("Username already exists.");
                 System.out.println(" Please try again.\n");
                 System.out.println("Enter your Username");
-                usersname = myObj.nextLine();  // Read user input
+                username = myObj.nextLine();  // Read user input
+
+                System.out.println(username + ".txt");
+                System.out.println(pathname);
+
+                String newname = username;
+                if (username != pathname){
+                    System.out.println("Not eqaul");
+                    break;
+                }
+                if (username == pathname){
+                    System.out.println("Eqaul");
+                    break;
+                }
             }
         }
 
@@ -56,6 +58,33 @@ public class Main {
         System.out.println("Enter your Initial Balance");
         double balance = myObj.nextInt();  // Read user input
 
+        // List of Text files in a folder
+
+        File directoryPath = new File("C:\\Users\\timni\\IdeaProjects\\BankingSystem");
+        FilenameFilter textFilefilter = new FilenameFilter(){
+            public boolean accept(File dir, String name) {
+                String lowercaseName = name.toLowerCase();
+                if (lowercaseName.endsWith(".txt")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+
+        //List of all the text files
+        String textFilesList[] = directoryPath.list(textFilefilter);
+        System.out.println("List of the text files in the specified directory:");
+        for(String fileName : textFilesList) {
+            count++;
+            System.out.println(fileName);
+        }
+
+        count--;
+        count /= 2;
+
+        // End : List of Text files in a folder
+
         // Create Account Number
         int accountNumber = count++;
 
@@ -63,7 +92,7 @@ public class Main {
         // Create User Data file as username.txt
         try {
             // File name should be the same as the username
-            File file = new File(usersname + ".txt");
+            File file = new File(username + ".txt");
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             } else {
@@ -76,10 +105,10 @@ public class Main {
 
         // Write user data to username.txt
         try {
-            FileWriter myWriter = new FileWriter(usersname + ".txt");
+            FileWriter myWriter = new FileWriter(username + ".txt");
             myWriter.write("Account Number: " + accountNumber + "\n");
             myWriter.write("Name: " + name + "\n");
-            myWriter.write("Username: " + usersname + "\n");
+            myWriter.write("Username: " + username + "\n");
             myWriter.write("Password: " + password + "\n");
             myWriter.write("Address: " + address + "\n");
             myWriter.write("Age: " + age + "\n");
@@ -98,7 +127,7 @@ public class Main {
         //////////// Create user account files as usernameaccount.txt ////////////
         try {
             // File name should be the same as the username
-            File file = new File(usersname + "account.txt");
+            File file = new File(username + "account.txt");
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             }
@@ -110,7 +139,7 @@ public class Main {
 
         // Write user data to usernameaccount.txt
         try {
-            FileWriter myWriter = new FileWriter(usersname + "account.txt");
+            FileWriter myWriter = new FileWriter(username + "account.txt",true);
             //      Date
 //      Transaction Type
 //          0 - Initial Balance
@@ -135,7 +164,7 @@ public class Main {
 
         //////////// Open and Write Bank account files as bank.txt ////////////
         try {
-            FileWriter myWriter = new FileWriter("bank.txt");
+            FileWriter myWriter = new FileWriter("bank.txt",true);
             //      Date
 //      Transaction Type
 //          0 - Initial Balance
@@ -159,25 +188,17 @@ public class Main {
 
     }
 
-    public static boolean login() {
-        System.out.println("\nLogin : \n");
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-
-        System.out.println("Enter your Username");
-        String usersname = myObj.nextLine();  // Read user input
-
-        System.out.println("Enter your Password");
-        String password = myObj.nextLine();  // Read user input
+    public static boolean login(String username, String password) {
 
         try {
-            File file = new File("filename.txt");
+            File file = new File(username + ".txt");
             Scanner myReader = new Scanner(file);
             boolean usernamecheck = false;
             boolean passwordcheck = false;
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
 
-                if (data.contains(usersname)){
+                if (data.contains(username)){
                     usernamecheck = true;
                 }
                 if (data.contains(password)){
@@ -257,12 +278,89 @@ public class Main {
                 case 2:
                     //////// Create Account user object for current user
                     BankAccount account = new BankAccount();
-                    accountLogin = true;
-                    // Add data to the account object
-                    createAccountObject(account);
+
+                    System.out.println("\nLogin : \n");
+                    Scanner logObj = new Scanner(System.in);  // Create a Scanner object
+
+                    System.out.println("Enter your Username");
+                    String username = logObj.nextLine();  // Read user input
+
+                    System.out.println("Enter your Password");
+                    String password = logObj.nextLine();  // Read user input
+
+
 
                     //////// Login
-                    innerloop : while (login()){
+                    innerloop : while (login(username, password)) {
+                        System.out.println(username + "\n\n\n\n");
+                        // Add data to the account object
+                        //createAccountObject(account , username);
+                        try {
+                            File file = new File(username + ".txt");
+                            Scanner myReader = new Scanner(file);
+
+                            while (myReader.hasNextLine()) {
+                                String data = myReader.nextLine();
+                                String[] parts = data.split(": ");
+
+                                switch (parts[0]) {
+                                    case "Account Number":
+                                        account.setAccountNumber(Integer.parseInt(parts[1]));
+                                        break;
+                                    case "Name":
+                                        account.setAccountName(parts[1]);
+                                        break;
+                                    case "Address":
+                                        account.setAccountAddress(parts[1]);
+                                        break;
+                                    case "Age":
+                                        account.setAccountAge(Integer.parseInt(parts[1]));
+                                        break;
+                                    case "Balance":
+                                        account.setAccountBalance(Double.parseDouble(parts[1]));
+                                        break;
+                                    case "Username":
+                                        account.setAccountUserName(parts[1]);
+                                        break;
+                                }
+                            }
+                            myReader.close();
+
+                        } catch (IOException e) {
+                            System.out.println("An error occurred.");
+                            e.printStackTrace();
+                        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         // You are successfully logged in
                         System.out.println("\nYou are successfully logged in\n");
 
@@ -281,13 +379,14 @@ public class Main {
                         switch (choice2) {
                             case 1:
                                 // Print Account Balance
-                                if (accountLogin) {
                                     System.out.println(account.getAccountBalance());
-                                }
                                 break;
 
                             case 2:
                                 // Withdraw Money
+
+                                System.out.println();
+                                System.out.println(account.toString());
 
                                 System.out.println("\nWithdraw Money : \n");
                                 System.out.println("Enter amount to withdraw : ");
@@ -297,12 +396,32 @@ public class Main {
                                 // Print Account Balance
                                 System.out.println("Account Balance");
                                 System.out.println(account.getAccountBalance());
+                                System.out.println(account.getAccountUserName() + ".txt");
 
                                 // Need to save to file
 
 
                                 // Write user data to usernameaccount.txt
-                                writeFiles(account, withdraw, 1);
+                                //writeFiles(account, withdraw, 1);
+                                System.out.println(account.getAccountUserName() + "account.txt" + "\n\n\n\n\n\n\n");
+
+                                try {
+                                    FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt", true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "1" + " , " + withdraw + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+
+
 
                                 //////////// Open and Write Bank account files as bank.txt ////////////
                                 writeBankFile(account, withdraw,1);
@@ -324,35 +443,127 @@ public class Main {
 
 
                                 // Write user data to usernameaccount.txt
-                                writeFiles(account, deposit,2);
+                                //writeFiles(account, deposit,2);
+                                System.out.println(account.getAccountUserName() + "account.txt");
 
+                                try {
+                                    FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "2" + " , " + deposit + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
 
                                 //////////// Open and Write Bank account files as bank.txt ////////////
                                 writeBankFile(account, deposit,2);
 
                                 break;
                             case 4:
+                                Scanner traObj = new Scanner(System.in);  // Create a Scanner object
+
                                 // Transfer Money
                                 System.out.println("\nTransfer Money : \n");
 
                                 // Get Destination Account
-                                System.out.println("Enter destination account number : ");
-                                int destinationAccountNumber = myObj.nextInt();
+                                System.out.println("Enter destination account username : ");
+                                String destinationAccountName = traObj.nextLine();
 
                                 BankAccount destinationAccount = new BankAccount();
 
                                 // Need to send the destination account number to the method
-                                createAccountObject(destinationAccount);
+                                //createAccountObject(destinationAccount, destinationAccountNumber);
+
+                                try {
+                                    File file = new File(destinationAccountName + ".txt");
+                                    Scanner myReader = new Scanner(file);
+
+                                    while (myReader.hasNextLine()) {
+                                        String data = myReader.nextLine();
+                                        String[] parts = data.split(": ");
+
+                                        switch (parts[0]) {
+                                            case "Account Number":
+                                                destinationAccount.setAccountNumber(Integer.parseInt(parts[1]));
+                                                break;
+                                            case "Name":
+                                                destinationAccount.setAccountName(parts[1]);
+                                                break;
+                                            case "Address":
+                                                destinationAccount.setAccountAddress(parts[1]);
+                                                break;
+                                            case "Age":
+                                                destinationAccount.setAccountAge(Integer.parseInt(parts[1]));
+                                                break;
+                                            case "Balance":
+                                                destinationAccount.setAccountBalance(Double.parseDouble(parts[1]));
+                                                break;
+                                        }
+                                    }
+                                    myReader.close();
+
+                                } catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+                                System.out.println(destinationAccount.toString());
 
                                 System.out.println("Enter amount to transfer : ");
-                                double transfer = myObj.nextDouble();
+                                double transfer = traObj.nextDouble();
                                 //account.transfer(transfer);
+
+                                System.out.println("Im here\n\n\n\n");
 
                                 // Need to add to files
                                 writeFiles(account, transfer,3);
+
+                                try {
+                                    System.out.println(account.getAccountUserName() + "account.txt");
+                                    FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+
+                                System.out.println("Im here\n\n\n\n");
                                 writeFiles(destinationAccount, transfer,3);
+
+                                try {
+                                    FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+
+                                System.out.println("Im here\n\n\n\n");
                                 writeFiles(account, transfer,3);
                                 writeFiles(destinationAccount, transfer,3);
+                                System.out.println("Im here\n\n\n\n");
 
                                 break;
 
@@ -364,7 +575,7 @@ public class Main {
 
                                 if (answer.equals("Y")) {
                                     // Delete account
-                                    File file = new File("filename.txt");
+                                    File file = new File(account.getAccountUserName() + ".txt");
                                     if (file.delete()) {
                                         System.out.println("Deleted the file: " + file.getName());
                                     } else {
@@ -372,7 +583,7 @@ public class Main {
                                     }
 
                                     // Need to delete from file
-                                    File fileAccount = new File("filename.txt");
+                                    File fileAccount = new File(account.getAccountUserName() + "account.txt");
                                     if (fileAccount.delete()) {
                                         System.out.println("Deleted the file: " + fileAccount.getName());
                                     } else {
@@ -410,18 +621,10 @@ public class Main {
     }
 
     private static void writeBankFile(BankAccount account, double amount, int transactionType ) {
+        System.out.println(account.getAccountUserName());
         try {
-            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt");
-            //FileWriter myWriter = new FileWriter("bank.txt");
-            //      Date
-//      Transaction Type
-//          0 - Initial Balance
-//          1 - Withdraw
-//          2 - Deposit
-//          3 - Transfer
-//      Transaction Amount
-//      Balance
-//      Destination Account (Bank or Other User)
+            FileWriter myWriter = new FileWriter( "bank.txt",true);
+            myWriter.write("Saad2222");
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
             //timeStamp,0,balance,balance,Bank
             myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
@@ -436,17 +639,10 @@ public class Main {
     }
 
     private static void writeFiles(BankAccount account, double amount, int transactionType ) {
+        System.out.println(account.getAccountUserName());
         try {
-            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt");
-            //      Date
-//      Transaction Type
-//          0 - Initial Balance
-//          1 - Withdraw
-//          2 - Deposit
-//          3 - Transfer
-//      Transaction Amount
-//      Balance
-//      Destination Account (Bank or Other User)
+            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
+            myWriter.write("Saad");
             String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
             //timeStamp,0,balance,balance,Bank
             myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , Bank\n");
@@ -460,45 +656,6 @@ public class Main {
         }
     }
 
-
-
-
-    private static void createAccountObject(BankAccount account) {
-        try {
-            File file = new File("filename.txt");
-            Scanner myReader = new Scanner(file);
-
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-                String[] parts = data.split(": ");
-
-                switch (parts[0]) {
-                    case "Account Number":
-                        account.setAccountNumber(Integer.parseInt(parts[1]));
-                        break;
-                    case "Name":
-                        account.setAccountName(parts[1]);
-                        break;
-                    case "Address":
-                        account.setAccountAddress(parts[1]);
-                        break;
-                    case "Age":
-                        account.setAccountAge(Integer.parseInt(parts[1]));
-                        break;
-                    case "Balance":
-                        account.setAccountBalance(Double.parseDouble(parts[1]));
-                        break;
-                }
-            }
-            myReader.close();
-
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        System.out.println(account.toString());
-    }
 }
 
 // Develop an application to represents the basic operations of a bank
