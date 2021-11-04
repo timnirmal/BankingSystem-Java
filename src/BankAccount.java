@@ -133,3 +133,20 @@ public class BankAccount {
 
 // To do
 //      Modify the createobject class with method to find curent username from file
+
+
+// Transaction Report Method
+//      Date
+//      Transaction Type
+//          0 - Initial Balance
+//          1 - Deposit
+//          2 - Withdraw
+//          3 - Transfer
+//      Transaction Amount
+//      Balance
+//      Destination Account (Bank or Other User)
+
+
+// In bank side only above task are displayed.
+// Transaction is recorded as source to destination.
+

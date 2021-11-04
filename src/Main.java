@@ -1,6 +1,8 @@
 import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;  // Import the Scanner class
 
 public class Main {
@@ -42,13 +44,14 @@ public class Main {
         System.out.println("Enter your Initial Balance");
         double balance = myObj.nextInt();  // Read user input
 
-
-
         // Create Account Number
         int accountNumber = count++;
 
+
+        // Create User Data file as username.txt
         try {
-            File file = new File("filename.txt");
+            // File name should be the same as the username
+            File file = new File(usersname + ".txt");
             if (file.createNewFile()) {
                 System.out.println("File created: " + file.getName());
             } else {
@@ -59,8 +62,9 @@ public class Main {
             e.printStackTrace();
         }
 
+        // Write user data to username.txt
         try {
-            FileWriter myWriter = new FileWriter("filename1.txt");
+            FileWriter myWriter = new FileWriter(usersname + ".txt");
             myWriter.write("Account Number: " + accountNumber + "\n");
             myWriter.write("Name: " + name + "\n");
             myWriter.write("Username: " + usersname + "\n");
@@ -77,6 +81,70 @@ public class Main {
         }
 
         System.out.println("\nAccount Created : \n"+accountNumber);
+
+
+        //////////// Create user account files as usernameaccount.txt ////////////
+        try {
+            // File name should be the same as the username
+            File file = new File(usersname + "account.txt");
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
+            }
+
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        // Write user data to usernameaccount.txt
+        try {
+            FileWriter myWriter = new FileWriter(usersname + "account.txt");
+            //      Date
+//      Transaction Type
+//          0 - Initial Balance
+//          1 - Deposit
+//          2 - Withdraw
+//          3 - Transfer
+//      Transaction Amount
+//      Balance
+//      Destination Account (Bank or Other User)
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+            //timeStamp,0,balance,balance,Bank
+            myWriter.write(timeStamp + " , 0 , " + balance + " , " + balance + " , Bank\n");
+
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+
+        //////////// Open and Write Bank account files as bank.txt ////////////
+        try {
+            FileWriter myWriter = new FileWriter("bank.txt");
+            //      Date
+//      Transaction Type
+//          0 - Initial Balance
+//          1 - Deposit
+//          2 - Withdraw
+//          3 - Transfer
+//      Transaction Amount
+//      Balance
+//      Destination Account (Bank or Other User)
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+            //timeStamp,0,balance,balance,Bank
+            myWriter.write(timeStamp + " , 0 , " + balance + " , " + balance + " , " + accountNumber + "\n");
+
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
     }
 
     public static boolean login() {
@@ -148,6 +216,18 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
+
+        //////////// Create Bank account files as bank.txt ////////////
+        try {
+            // File name should be the same as the username
+            File file = new File("bank.txt");
+            if (file.createNewFile()) {
+                System.out.println("File created: " + file.getName());
+            }
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
 
         outerloop: while (true) {
             System.out.println("\nWelcome to the Bank of Java\n");
