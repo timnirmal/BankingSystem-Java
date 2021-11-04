@@ -25,12 +25,24 @@ public class Main {
         System.out.println("Enter your Username");
         String usersname = myObj.nextLine();  // Read user input
 
-        File f = new File(usersname + ".txt");
-        while (f.exists()) {
-            System.out.println("\nUsername already exists. Please try again.\n");
-            System.out.println("Enter your Username");
-            usersname = myObj.nextLine();  // Read user input
+        String pathname = usersname + ".txt";
+        File f = new File(pathname);
+
+        if(f.exists()){
+            while (true){
+                System.out.println(usersname);
+                System.out.println(pathname);
+                String newname = usersname;
+                if (usersname != pathname){
+                    break;
+                }
+                System.out.println("Username already exists.");
+                System.out.println(" Please try again.\n");
+                System.out.println("Enter your Username");
+                usersname = myObj.nextLine();  // Read user input
+            }
         }
+
 
         System.out.println("Enter your Password");
         String password = myObj.nextLine();  // Read user input
@@ -254,6 +266,8 @@ public class Main {
                         // You are successfully logged in
                         System.out.println("\nYou are successfully logged in\n");
 
+                        System.out.println("\nW E L C O M E\n");
+
                         System.out.println("\n1. Request Balance");
                         System.out.println("2. Withdraw Money");
                         System.out.println("3. Deposit Money");
@@ -271,6 +285,7 @@ public class Main {
                                     System.out.println(account.getAccountBalance());
                                 }
                                 break;
+
                             case 2:
                                 // Withdraw Money
 
@@ -285,6 +300,14 @@ public class Main {
 
                                 // Need to save to file
 
+
+                                // Write user data to usernameaccount.txt
+                                writeFiles(account, withdraw, 1);
+
+                                //////////// Open and Write Bank account files as bank.txt ////////////
+                                writeBankFile(account, withdraw,1);
+
+
                                 break;
                             case 3:
                                 // Deposit Money
@@ -298,6 +321,15 @@ public class Main {
                                 System.out.println(account.getAccountBalance());
 
                                 // Need to save to file
+
+
+                                // Write user data to usernameaccount.txt
+                                writeFiles(account, deposit,2);
+
+
+                                //////////// Open and Write Bank account files as bank.txt ////////////
+                                writeBankFile(account, deposit,2);
+
                                 break;
                             case 4:
                                 // Transfer Money
@@ -312,14 +344,18 @@ public class Main {
                                 // Need to send the destination account number to the method
                                 createAccountObject(destinationAccount);
 
-
                                 System.out.println("Enter amount to transfer : ");
                                 double transfer = myObj.nextDouble();
                                 //account.transfer(transfer);
 
-                                // Need to aff to files
+                                // Need to add to files
+                                writeFiles(account, transfer,3);
+                                writeFiles(destinationAccount, transfer,3);
+                                writeFiles(account, transfer,3);
+                                writeFiles(destinationAccount, transfer,3);
 
                                 break;
+
                             case 5:
                                 // Close Account
                                 System.out.println("\nClose Account : \n");
@@ -328,14 +364,27 @@ public class Main {
 
                                 if (answer.equals("Y")) {
                                     // Delete account
+                                    File file = new File("filename.txt");
+                                    if (file.delete()) {
+                                        System.out.println("Deleted the file: " + file.getName());
+                                    } else {
+                                        System.out.println("Failed to delete the file.");
+                                    }
 
                                     // Need to delete from file
+                                    File fileAccount = new File("filename.txt");
+                                    if (fileAccount.delete()) {
+                                        System.out.println("Deleted the file: " + fileAccount.getName());
+                                    } else {
+                                        System.out.println("Failed to delete the file.");
+                                    }
 
                                     System.out.println("Account Deleted");
                                 } else {
                                     System.out.println("Account not deleted");
                                 }
                                 break;
+
                             case 6:
                                 // Logout
                                 System.out.println("\nLogout : \n");
@@ -359,6 +408,59 @@ public class Main {
 
 
     }
+
+    private static void writeBankFile(BankAccount account, double amount, int transactionType ) {
+        try {
+            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt");
+            //FileWriter myWriter = new FileWriter("bank.txt");
+            //      Date
+//      Transaction Type
+//          0 - Initial Balance
+//          1 - Withdraw
+//          2 - Deposit
+//          3 - Transfer
+//      Transaction Amount
+//      Balance
+//      Destination Account (Bank or Other User)
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+            //timeStamp,0,balance,balance,Bank
+            myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void writeFiles(BankAccount account, double amount, int transactionType ) {
+        try {
+            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt");
+            //      Date
+//      Transaction Type
+//          0 - Initial Balance
+//          1 - Withdraw
+//          2 - Deposit
+//          3 - Transfer
+//      Transaction Amount
+//      Balance
+//      Destination Account (Bank or Other User)
+            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+            //timeStamp,0,balance,balance,Bank
+            myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , Bank\n");
+
+            myWriter.close();
+            System.out.println("Successfully wrote to the file.");
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     private static void createAccountObject(BankAccount account) {

@@ -9,6 +9,7 @@ public class BankAccount {
     private double accountBalance;
     private String accountAddress;
     private int accountAge;
+    private String accountUserName;
     //private String phoneNumber;
 
     public BankAccount () {}
@@ -44,6 +45,10 @@ public class BankAccount {
       //  this.phoneNumber = phoneNumber;
     //}
 
+    public void setAccountUserName(String accountUserName) {
+        this.accountUserName = accountUserName;
+    }
+
 
     public String getAccountName() {
         return accountName;
@@ -66,6 +71,10 @@ public class BankAccount {
     //public String getPhoneNumber() {
       //  return phoneNumber;
     //}
+
+    public String getAccountUserName() {
+        return accountUserName;
+    }
 
     public void deposit(double amount) {
         this.accountBalance += amount;
@@ -139,8 +148,8 @@ public class BankAccount {
 //      Date
 //      Transaction Type
 //          0 - Initial Balance
-//          1 - Deposit
-//          2 - Withdraw
+//          1 - Withdraw
+//          2 - Deposit
 //          3 - Transfer
 //      Transaction Amount
 //      Balance
@@ -149,4 +158,5 @@ public class BankAccount {
 
 // In bank side only above task are displayed.
 // Transaction is recorded as source to destination.
+
 
