@@ -1,9 +1,16 @@
+/********************************************************************************
+ * Name             : Nirmal L.Y.T.
+ * Index No         : 19/ENG/072
+ * Registration No  : EN93921
+ *********************************************************************************/
+
 import java.io.File;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.FilenameFilter;  // Import the FilenameFilter class
 import java.io.IOException;     // Import the IOException class to handle errors
 import java.text.SimpleDateFormat; // Import the SimpleDateFormat class to format the date
 import java.util.Date;
+import java.util.Objects;
 import java.util.Scanner;  // Import the Scanner class
 
 public class Main {
@@ -33,13 +40,12 @@ public class Main {
                 System.out.println(username + ".txt");
                 System.out.println(pathname);
 
-                String newname = username;
-                if (username != pathname){
-                    System.out.println("Not eqaul");
+                if (!Objects.equals(username, pathname)){
+                    System.out.println("Not equal");
                     break;
                 }
-                if (username == pathname){
-                    System.out.println("Eqaul");
+                if (username.equals(pathname)){
+                    System.out.println("Equal");
                     break;
                 }
             }
@@ -61,15 +67,9 @@ public class Main {
         // List of Text files in a folder
 
         File directoryPath = new File("C:\\Users\\timni\\IdeaProjects\\BankingSystem");
-        FilenameFilter textFilefilter = new FilenameFilter(){
-            public boolean accept(File dir, String name) {
-                String lowercaseName = name.toLowerCase();
-                if (lowercaseName.endsWith(".txt")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        FilenameFilter textFilefilter = (dir, name1) -> {
+            String lowercaseName = name1.toLowerCase();
+            return lowercaseName.endsWith(".txt");
         };
 
         //List of all the text files
@@ -217,35 +217,9 @@ public class Main {
         } catch (IOException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
-        }
-        return false;
-    }
-
-    // Request balance
-    /*
-    public static void requestBalance(int accountNumber) {
-        System.out.println("\nRequest Balance : \n");
-        Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-
-        try {
-            File file = new File("filename.txt");
-            Scanner myReader = new Scanner(file);
-
-            while (myReader.hasNextLine()) {
-                String data = myReader.nextLine();
-
-                if (data.contains( "Balance" )){
-                    System.out.println("\nBalance : " + data.substring(data.indexOf("Balance: ") + 9) + "\n");
-                }
-            }
-
-            myReader.close();
-        } catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
+            return false;
         }
     }
-*/
 
     public static void main(String[] args) {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
@@ -262,6 +236,7 @@ public class Main {
             e.printStackTrace();
         }
 
+        // Main Programme
         outerloop: while (true) {
             System.out.println("\nWelcome to the Bank of Java\n");
             System.out.println("1. Create Account");
@@ -276,6 +251,8 @@ public class Main {
                     createAccount();
                     break;
                 case 2:
+                    // Login
+
                     //////// Create Account user object for current user
                     BankAccount account = new BankAccount();
 
@@ -288,13 +265,9 @@ public class Main {
                     System.out.println("Enter your Password");
                     String password = logObj.nextLine();  // Read user input
 
-
-
                     //////// Login
                     innerloop : while (login(username, password)) {
-                        System.out.println(username + "\n\n\n\n");
                         // Add data to the account object
-                        //createAccountObject(account , username);
                         try {
                             File file = new File(username + ".txt");
                             Scanner myReader = new Scanner(file);
@@ -331,39 +304,10 @@ public class Main {
                             e.printStackTrace();
                         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                         // You are successfully logged in
                         System.out.println("\nYou are successfully logged in\n");
 
+                        // Login Screen
                         System.out.println("\nW E L C O M E\n");
 
                         System.out.println("\n1. Request Balance");
@@ -384,10 +328,6 @@ public class Main {
 
                             case 2:
                                 // Withdraw Money
-
-                                System.out.println();
-                                System.out.println(account.toString());
-
                                 System.out.println("\nWithdraw Money : \n");
                                 System.out.println("Enter amount to withdraw : ");
                                 double withdraw = myObj.nextDouble();
@@ -398,8 +338,7 @@ public class Main {
                                 System.out.println(account.getAccountBalance());
                                 System.out.println(account.getAccountUserName() + ".txt");
 
-                                // Need to save to file
-
+                                ///// Need to save to file
 
                                 // Write user data to usernameaccount.txt
                                 //writeFiles(account, withdraw, 1);
@@ -407,6 +346,23 @@ public class Main {
 
                                 try {
                                     FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt", true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "1" + " , " + withdraw + " , " + account.getAccountBalance() + " , " + "Bank\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+
+                                //////////// Open and Write Bank account files as bank.txt ////////////
+                                try {
+                                    FileWriter myWriter = new FileWriter( "bank.txt",true);
                                     myWriter.write("Saad2222");
                                     String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
                                     //timeStamp,0,balance,balance,Bank
@@ -421,12 +377,6 @@ public class Main {
                                 }
 
 
-
-
-                                //////////// Open and Write Bank account files as bank.txt ////////////
-                                writeBankFile(account, withdraw,1);
-
-
                                 break;
                             case 3:
                                 // Deposit Money
@@ -439,8 +389,7 @@ public class Main {
                                 System.out.println("Account Balance");
                                 System.out.println(account.getAccountBalance());
 
-                                // Need to save to file
-
+                                ///// Need to save to file
 
                                 // Write user data to usernameaccount.txt
                                 //writeFiles(account, deposit,2);
@@ -448,6 +397,22 @@ public class Main {
 
                                 try {
                                     FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
+                                    myWriter.write("Saad2222");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "2" + " , " + deposit + " , " + account.getAccountBalance() + " , " +  "Bank\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
+
+                                //////////// Open and Write Bank account files as bank.txt ////////////
+                                try {
+                                    FileWriter myWriter = new FileWriter( "bank.txt",true);
                                     myWriter.write("Saad2222");
                                     String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
                                     //timeStamp,0,balance,balance,Bank
@@ -460,9 +425,6 @@ public class Main {
                                     System.out.println("An error occurred.");
                                     e.printStackTrace();
                                 }
-
-                                //////////// Open and Write Bank account files as bank.txt ////////////
-                                writeBankFile(account, deposit,2);
 
                                 break;
                             case 4:
@@ -477,8 +439,7 @@ public class Main {
 
                                 BankAccount destinationAccount = new BankAccount();
 
-                                // Need to send the destination account number to the method
-                                //createAccountObject(destinationAccount, destinationAccountNumber);
+                                ////// Read Data from Destination Account //////
 
                                 try {
                                     File file = new File(destinationAccountName + ".txt");
@@ -513,24 +474,22 @@ public class Main {
                                     e.printStackTrace();
                                 }
 
-                                System.out.println(destinationAccount.toString());
+                                // Transaction Process
 
                                 System.out.println("Enter amount to transfer : ");
                                 double transfer = traObj.nextDouble();
                                 //account.transfer(transfer);
 
-                                System.out.println("Im here\n\n\n\n");
 
                                 // Need to add to files
-                                writeFiles(account, transfer,3);
 
+                                // Write File current account
                                 try {
                                     System.out.println(account.getAccountUserName() + "account.txt");
                                     FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
-                                    myWriter.write("Saad2222");
                                     String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
                                     //timeStamp,0,balance,balance,Bank
-                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , " + "Bank\n");
 
                                     myWriter.close();
                                     System.out.println("Successfully wrote to the file.");
@@ -540,16 +499,12 @@ public class Main {
                                     e.printStackTrace();
                                 }
 
-
-                                System.out.println("Im here\n\n\n\n");
-                                writeFiles(destinationAccount, transfer,3);
-
+                                // Write File destination account
                                 try {
-                                    FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
-                                    myWriter.write("Saad2222");
+                                    FileWriter myWriter = new FileWriter(destinationAccount.getAccountUserName() + "account.txt",true);
                                     String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
                                     //timeStamp,0,balance,balance,Bank
-                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + destinationAccount.getAccountBalance() + " , " +  "Bank\n");
 
                                     myWriter.close();
                                     System.out.println("Successfully wrote to the file.");
@@ -559,11 +514,24 @@ public class Main {
                                     e.printStackTrace();
                                 }
 
+                                // Write to bank file
 
-                                System.out.println("Im here\n\n\n\n");
-                                writeFiles(account, transfer,3);
-                                writeFiles(destinationAccount, transfer,3);
-                                System.out.println("Im here\n\n\n\n");
+                                System.out.println(account.getAccountUserName());
+                                try {
+                                    FileWriter myWriter = new FileWriter("bank.txt",true);
+                                    myWriter.write("Saad");
+                                    String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
+                                    //timeStamp,0,balance,balance,Bank
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + account.getAccountBalance() + " , Bank\n");
+                                    myWriter.write(timeStamp + " , " + "3" + " , " + transfer + " , " + destinationAccount.getAccountBalance() + " , Bank\n");
+
+                                    myWriter.close();
+                                    System.out.println("Successfully wrote to the file.");
+                                }
+                                catch (IOException e) {
+                                    System.out.println("An error occurred.");
+                                    e.printStackTrace();
+                                }
 
                                 break;
 
@@ -611,99 +579,10 @@ public class Main {
                     break outerloop;
             }
             // Enf of outer loop
-
-
-
-
         }
 
 
     }
 
-    private static void writeBankFile(BankAccount account, double amount, int transactionType ) {
-        System.out.println(account.getAccountUserName());
-        try {
-            FileWriter myWriter = new FileWriter( "bank.txt",true);
-            myWriter.write("Saad2222");
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-            //timeStamp,0,balance,balance,Bank
-            myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , " + account.getAccountNumber() + "\n");
-
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        }
-        catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
-
-    private static void writeFiles(BankAccount account, double amount, int transactionType ) {
-        System.out.println(account.getAccountUserName());
-        try {
-            FileWriter myWriter = new FileWriter(account.getAccountUserName() + "account.txt",true);
-            myWriter.write("Saad");
-            String timeStamp = new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(new Date());
-            //timeStamp,0,balance,balance,Bank
-            myWriter.write(timeStamp + " , " + transactionType + " , " + amount + " , " + account.getAccountBalance() + " , Bank\n");
-
-            myWriter.close();
-            System.out.println("Successfully wrote to the file.");
-        }
-        catch (IOException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-    }
 
 }
-
-// Develop an application to represents the basic operations of a bank
-
-// 1. Create a bank account
-// 2. Close a bank account
-// 3. Withdraw money
-// 4. Deposit money
-// 5. Request balance
-// 6. Transfer money
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// string, int, float, double, boolean, char, long, short, byte
-// byte -128 to 127, short -32,768 to 32,767, int -2,147,483,648 to 2,147,483,647, long -9,223,372,036,854,775,808L to 9,223,372,036,854,775,807
-// float -3.4E-45f to 3.4E+38, double -1.7E-308d to 1.7E+308
-
-// String[] cars = {"Volvo", "BMW", "Ford", "Mazda"};
-/* for (int i = 0; i < cars.length; i++) {
-  System.out.println(cars[i]);
-}*/
-
-//for (type variable : arrayname) {}
-
-// Multi-dimensional array int[][] myNumbers = { {1, 2, 3, 4}, {5, 6, 7} };
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Java Classes
-
-/*{
-    int x = 5;
-
-    public static void main(String[] args) {
-        System.out.println("Hello World");
-        Main obj = new Main();
-        System.out.println(obj.x);
-    }
-}*/
-
-// final int x = 10; - Stop overriding
-
-
-
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
